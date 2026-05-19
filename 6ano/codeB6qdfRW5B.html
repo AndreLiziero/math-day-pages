@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Cadeado Futurista</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at center, #0f172a, #020617);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        color: white;
+      }
+
+      .container {
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+      }
+
+      .cadeado {
+        width: 320px;
+        max-width: 90%;
+        margin-bottom: 25px;
+        transition: 0.6s;
+        filter: drop-shadow(0 0 15px rgba(0, 180, 255, 0.5));
+      }
+
+      h1 {
+        margin-bottom: 10px;
+        font-size: 32px;
+      }
+
+      .descricao {
+        opacity: 0.8;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      input {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 14px;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 15px;
+        background: #111827;
+        color: white;
+        outline: none;
+        border: 1px solid #334155;
+      }
+
+      input:focus {
+        border: 1px solid #38bdf8;
+        box-shadow: 0 0 10px #38bdf8;
+      }
+
+      button {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 14px;
+        background: #0ea5e9;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background: #0284c7;
+      }
+
+      .mensagem {
+        margin-top: 20px;
+        min-height: 40px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .tentativas {
+        margin-top: 10px;
+        opacity: 0.7;
+      }
+
+      .dica {
+        margin-top: 20px;
+        font-size: 14px;
+        opacity: 0.6;
+      }
+
+      .sucesso {
+        animation: brilho 1s infinite alternate;
+      }
+
+      @keyframes brilho {
+        from {
+          filter: drop-shadow(0 0 10px #22c55e);
+        }
+
+        to {
+          filter: drop-shadow(0 0 25px #22c55e);
+        }
+      }
+
+      .erro {
+        animation: tremer 0.3s;
+      }
+
+      @keyframes tremer {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        50% {
+          transform: translateX(10px);
+        }
+        75% {
+          transform: translateX(-10px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- IMAGEM DO CADEADO -->
+      <img src="img/lock.png" id="cadeado" class="cadeado" />
+
+      <!-- TÍTULO -->
+      <h1 id="titulo"></h1>
+
+      <!-- DESCRIÇÃO -->
+      <p class="descricao" id="descricao"></p>
+
+      <!-- INPUT -->
+      <input type="text" id="senha" placeholder="Digite a senha" />
+
+      <!-- BOTÃO -->
+      <button onclick="verificarSenha()">DESBLOQUEAR</button>
+
+      <!-- MENSAGEM -->
+      <div class="mensagem" id="mensagem"></div>
+
+      <!-- TENTATIVAS -->
+      <div class="tentativas" id="tentativas"></div>
+
+      <!-- DICA -->
+      <div class="dica" id="dica"></div>
+    </div>
+
+    <script>
+      // ========================================
+      // CONFIGURAÇÕES DO CADEADO
+      // ========================================
+
+      const CONFIG = {
+        // CONTEÚDO
+
+        titulo: 'Cadeado B - 6º Ano',
+
+        descricao: 'Descubra a senha correta para desbloquear o sistema.',
+
+        dica: 'Dica: Primeiro o grupo dos pares e depois o grupo dos ímpares invertido.',
+
+        // SENHA CORRETA
+        senha: '291069',
+
+        // LIMITE DE TENTATIVAS
+        tentativasMaximas: 50,
+
+        // IMAGENS
+        imagemFechado: 'img/lock.png',
+        imagemAberto: 'img/unlock.png',
+
+        // MENSAGENS
+        mensagemErro: '❌ SENHA INCORRETA',
+
+        mensagemSucesso: '✅ ACESSO LIBERADO',
+
+        mensagemBloqueio: '🚫 SISTEMA BLOQUEADO',
+
+        // PÁGINA DE DESTINO
+        paginaSucesso: 'modB6FU8Sgfr.html',
+      };
+
+      // ========================================
+      // INICIALIZAÇÃO DA PÁGINA
+      // ========================================
+
+      document.getElementById('titulo').innerHTML = CONFIG.titulo;
+
+      document.getElementById('descricao').innerHTML = CONFIG.descricao;
+
+      document.getElementById('dica').innerHTML = CONFIG.dica;
+
+      document.getElementById(
+        'tentativas'
+      ).innerHTML = `Tentativas restantes: ${CONFIG.tentativasMaximas}`;
+
+      // ========================================
+      // VARIÁVEIS DO SISTEMA
+      // ========================================
+
+      let tentativas = CONFIG.tentativasMaximas;
+
+      // ========================================
+      // FUNÇÃO PRINCIPAL
+      // ========================================
+
+      function verificarSenha() {
+        // CAPTURA ELEMENTOS HTML
+
+        const senha = document.getElementById('senha').value.trim();
+
+        const mensagem = document.getElementById('mensagem');
+
+        const tentativasTexto = document.getElementById('tentativas');
+
+        const cadeado = document.getElementById('cadeado');
+
+        // ========================================
+        // SENHA CORRETA
+        // ========================================
+
+        if (senha === CONFIG.senha) {
+          // TROCA IMAGEM
+
+          cadeado.src = CONFIG.imagemAberto;
+
+          // EFEITO VISUAL
+
+          cadeado.classList.add('sucesso');
+
+          // MENSAGEM
+
+          mensagem.style.color = '#22c55e';
+
+          mensagem.innerHTML = CONFIG.mensagemSucesso;
+
+          // REDIRECIONAMENTO
+
+          setTimeout(() => {
+            window.location.href = CONFIG.paginaSucesso;
+          }, 3000);
+
+          // ========================================
+          // SENHA INCORRETA
+          // ========================================
+        } else {
+          tentativas--;
+
+          // MENSAGEM DE ERRO
+
+          mensagem.style.color = '#ef4444';
+
+          mensagem.innerHTML = CONFIG.mensagemErro;
+
+          // ATUALIZA TENTATIVAS
+
+          tentativasTexto.innerHTML = `Tentativas restantes: ${tentativas}`;
+
+          // EFEITO DE ERRO
+
+          cadeado.classList.add('erro');
+
+          setTimeout(() => {
+            cadeado.classList.remove('erro');
+          }, 300);
+
+          // BLOQUEIO
+
+          if (tentativas <= 0) {
+            mensagem.innerHTML = CONFIG.mensagemBloqueio;
+
+            document.querySelector('button').disabled = true;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

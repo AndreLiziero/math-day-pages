@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Fratura do Tempo</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        overflow: hidden;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      img {
+        max-width: 100%;
+        max-height: 100vh;
+        object-fit: fill;
+        border-radius: 12px;
+        box-shadow: 0 0 20px #00bfff, 0 0 40px #0088ff55;
+      }
+
+
+      .botao {
+        position: absolute;
+
+        /* Centraliza o botão na tela */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        padding: 18px 50px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.35);
+
+        border: 3px solid #00bfff;
+        border-radius: 14px;
+
+        cursor: pointer;
+        letter-spacing: 2px;
+
+        opacity: 0;
+
+        transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+
+        box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff, inset 0 0 10px #00bfff;
+
+        /* Espera 10 segundos antes de aparecer */
+        animation: aparecer 1s forwards 10s, pulsar 1.8s infinite 11s;
+      }
+
+      .botao:hover {
+        background: #00bfff22;
+
+        box-shadow: 0 0 20px #00bfff, 0 0 40px #00bfff, 0 0 80px #00bfff;
+      }
+
+      @keyframes aparecer {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.7);
+        }
+
+        to {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      @keyframes pulsar {
+        0% {
+          transform: translate(-50%, -50%) scale(1);
+
+          box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff, 0 0 40px #00bfff;
+        }
+
+        50% {
+          transform: translate(-50%, -50%) scale(1.08);
+
+          box-shadow: 0 0 20px #00bfff, 0 0 40px #00bfff, 0 0 80px #00bfff;
+        }
+
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+
+          box-shadow: 0 0 10px #00bfff, 0 0 20px #00bfff, 0 0 40px #00bfff;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- TROQUE O NOME DA IMAGEM PELO NOME DO SEU ARQUIVO -->
+    <img src="img/fluxograma.png" alt="Fluxograma Escape Room" />
+
+    <button class="botao" onclick="window.location.href='codeA6FymHD45.html'">
+      COMEÇAR
+    </button>
+  </body>
+</html>
