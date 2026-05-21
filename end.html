@@ -23,7 +23,7 @@
 
         background: radial-gradient(circle at center, #111827 0%, #020617 100%);
 
-        overflow: hidden;
+        overflow: auto;
 
         color: white;
 
@@ -136,7 +136,7 @@
       .imagem-final {
         width: 100%;
 
-        max-width: 550px;
+        max-width: 480px;
 
         border-radius: 25px;
 
@@ -159,6 +159,18 @@
         font-weight: bold;
 
         text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+      }
+
+      .tempo-restante {
+        margin-top: 30px;
+
+        font-size: 36px;
+
+        font-weight: bold;
+
+        color: #22c55e;
+
+        text-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
       }
 
       /* ========================================
@@ -194,6 +206,9 @@
 
       <!-- FRASE FINAL -->
       <div class="frase" id="frase"></div>
+
+      <!-- TEMPO RESTANTE -->
+      <div class="tempo-restante" id="tempoRestante"></div>
     </div>
 
     <script>
@@ -224,6 +239,28 @@
       document.getElementById('frase').innerHTML = CONFIG.frase;
 
       document.getElementById('imagemFinal').src = CONFIG.imagem;
+
+      // ========================================
+      // TEMPO RESTANTE
+      // ========================================
+
+      const tempoFinal = parseInt(localStorage.getItem('tempo_restante_final'));
+
+      // VERIFICA SE EXISTE
+
+      if (!isNaN(tempoFinal)) {
+        let minutos = Math.floor(tempoFinal / 60);
+
+        let segundos = tempoFinal % 60;
+
+        minutos = String(minutos).padStart(2, '0');
+
+        segundos = String(segundos).padStart(2, '0');
+
+        document.getElementById(
+          'tempoRestante'
+        ).innerHTML = `⏱ TEMPO RESTANTE: ${minutos}:${segundos}`;
+      }
     </script>
   </body>
 </html>

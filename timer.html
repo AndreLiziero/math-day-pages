@@ -482,11 +482,16 @@
 
           clearInterval(intervalo);
 
+          // SALVA TEMPO FINAL
+
+          localStorage.setItem('tempo_restante_final', tempo);
+
           mensagem.style.color = '#22c55e';
 
           mensagem.innerHTML = CONFIG.mensagemSucesso;
 
           timerElemento.classList.add('sucesso');
+
 
           setTimeout(() => {
             localStorage.removeItem(STORAGE.tempo);
