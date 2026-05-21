@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Desativar Sistema</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      body {
+        height: 100vh;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background: radial-gradient(circle at center, #111827 0%, #020617 100%);
+
+        overflow: hidden;
+        color: #00e5ff;
+        text-shadow: 0 0 30px white;
+      }
+
+      /* ========================================
+         GRID FUTURISTA
+      ======================================== */
+
+      body::before {
+        content: '';
+
+        position: absolute;
+
+        width: 200%;
+        height: 200%;
+
+        background: repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 80px,
+          rgba(0, 255, 255, 0.03) 81px
+        );
+
+        animation: moverGrid 10s linear infinite;
+      }
+
+      @keyframes moverGrid {
+        from {
+          transform: translateX(0);
+        }
+
+        to {
+          transform: translateX(-80px);
+        }
+      }
+
+      /* ========================================
+         CONTAINER
+      ======================================== */
+
+      .container {
+        position: relative;
+
+        z-index: 2;
+
+        width: 90%;
+        max-width: 600px;
+
+        text-align: center;
+
+        padding: 40px;
+
+        border-radius: 25px;
+
+        background: rgba(255, 255, 255, 0.05);
+
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        backdrop-filter: blur(10px);
+
+        box-shadow: 0 0 60px rgba(255, 0, 0, 0.15);
+      }
+
+      /* ========================================
+         TÍTULO
+      ======================================== */
+
+      h1 {
+        margin-bottom: 20px;
+
+        font-size: 34px;
+
+        letter-spacing: 2px;
+      }
+
+      /* ========================================
+         TIMER
+      ======================================== */
+
+      .timer {
+        font-size: 180px;
+
+        font-weight: bold;
+
+        color: #ff0000;
+
+        text-shadow: 0 0 5px #060101, 0 0 10px #4b1111, 0 0 20px #da1111;
+
+        margin-bottom: 30px;
+
+        animation: pulsar 1s infinite alternate;
+      }
+
+      @keyframes pulsar {
+        from {
+          transform: scale(1);
+        }
+
+        to {
+          transform: scale(1.03);
+        }
+      }
+
+      /* ========================================
+         TEXTO
+      ======================================== */
+
+      .descricao {
+        margin-bottom: 25px;
+
+        opacity: 0.8;
+
+        line-height: 1.5;
+      }
+
+      /* ========================================
+         INPUT
+      ======================================== */
+
+      input {
+        width: 100%;
+
+        padding: 18px;
+
+        border: none;
+
+        border-radius: 15px;
+
+        background: #111827;
+
+        color: white;
+
+        text-align: center;
+
+        font-size: 22px;
+
+        outline: none;
+
+        border: 1px solid #334155;
+
+        margin-bottom: 20px;
+
+        display: none;
+      }
+
+      input:focus {
+        border: 1px solid #38bdf8;
+
+        box-shadow: 0 0 15px #38bdf8;
+      }
+
+      /* ========================================
+         BOTÕES
+      ======================================== */
+
+      button {
+        width: 100%;
+
+        padding: 18px;
+
+        border: none;
+
+        border-radius: 15px;
+
+        background: #00e5ff;
+
+        color: #001219;
+
+        font-weight: bold;
+
+        box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+
+        font-size: 22px;
+
+        cursor: pointer;
+
+        transition: 0.3s;
+
+        margin-bottom: 15px;
+      }
+
+      button:hover {
+        background: #7df9ff;
+      }
+
+      button:disabled {
+        opacity: 0.5;
+
+        cursor: not-allowed;
+      }
+
+      /* ========================================
+         MENSAGEM
+      ======================================== */
+
+      .mensagem {
+        margin-top: 25px;
+
+        min-height: 40px;
+
+        font-size: 20px;
+
+        font-weight: bold;
+      }
+
+      /* ========================================
+         ANIMAÇÕES
+      ======================================== */
+
+      .sucesso {
+        animation: sucesso 1s infinite alternate;
+      }
+
+      @keyframes sucesso {
+        from {
+          transform: scale(1);
+        }
+
+        to {
+          transform: scale(1.05);
+        }
+      }
+
+      .erro {
+        animation: tremer 0.3s;
+      }
+
+      @keyframes tremer {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-10px);
+        }
+        50% {
+          transform: translateX(10px);
+        }
+        75% {
+          transform: translateX(-10px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- TÍTULO -->
+      <h1 id="titulo"></h1>
+
+      <!-- TIMER -->
+      <div class="timer" id="timer">60:00</div>
+
+      <!-- DESCRIÇÃO -->
+      <p class="descricao" id="descricao"></p>
+
+      <!-- INPUT -->
+      <input type="text" id="senha" placeholder="DIGITE O CÓDIGO" />
+
+      <!-- BOTÃO INICIAR -->
+      <button id="botaoIniciar" onclick="iniciarTimer()">
+        INICIAR CONTAGEM
+      </button>
+
+      <!-- BOTÃO DESATIVAR -->
+      <button
+        id="botaoDesativar"
+        onclick="verificarCodigo()"
+        style="display: none"
+      >
+        DESATIVAR SISTEMA
+      </button>
+
+      <!-- MENSAGEM -->
+      <div class="mensagem" id="mensagem"></div>
+    </div>
+
+    <script>
+      // ========================================
+      // CONFIGURAÇÕES
+      // ========================================
+
+      const CONFIG = {
+        titulo: 'TEMPO PARA O COLAPSO FINAL',
+
+        descricao:
+          'Digite o código correto para interromper a contagem regressiva.',
+
+        codigo: 'Fratura do Tempo',
+
+        tempoInicial: 3600,
+
+        mensagemErro: '❌ CÓDIGO INVÁLIDO',
+
+        mensagemSucesso: '✅ SISTEMA DESATIVADO',
+
+        mensagemFim: '🚨 SISTEMA COMPROMETIDO',
+
+        paginaSucesso: 'end.html',
+      };
+
+      // ========================================
+      // CHAVES DO SISTEMA
+      // ========================================
+
+      const STORAGE = {
+        tempo: 'timer_tempo',
+
+        iniciado: 'timer_iniciado',
+
+        concluido: 'timer_concluido',
+      };
+
+      // ========================================
+      // INICIALIZAÇÃO
+      // ========================================
+
+      document.getElementById('titulo').innerHTML = CONFIG.titulo;
+
+      document.getElementById('descricao').innerHTML = CONFIG.descricao;
+
+      // ========================================
+      // VARIÁVEIS
+      // ========================================
+
+      let tempo =
+        parseInt(localStorage.getItem(STORAGE.tempo)) || CONFIG.tempoInicial;
+
+      let timerAtivo = localStorage.getItem(STORAGE.iniciado) === 'true';
+
+      let intervalo = null;
+
+      const timerElemento = document.getElementById('timer');
+
+      // ========================================
+      // RESTAURAR ESTADO
+      // ========================================
+
+      if (timerAtivo) {
+        document.getElementById('botaoIniciar').style.display = 'none';
+
+        document.getElementById('senha').style.display = 'block';
+
+        document.getElementById('botaoDesativar').style.display = 'block';
+
+        intervalo = setInterval(atualizarTimer, 1000);
+      }
+
+      // ========================================
+      // INICIAR TIMER
+      // ========================================
+
+      function iniciarTimer() {
+        // EVITA DUPLO CLIQUE
+
+        if (intervalo !== null) return;
+
+        timerAtivo = true;
+
+        intervalo = setInterval(atualizarTimer, 1000);
+
+        // ESCONDE BOTÃO INICIAR
+
+        document.getElementById('botaoIniciar').style.display = 'none';
+
+        // MOSTRA INPUT E BOTÃO
+
+        document.getElementById('senha').style.display = 'block';
+
+        document.getElementById('botaoDesativar').style.display = 'block';
+
+        localStorage.setItem(STORAGE.iniciado, 'true');
+      }
+
+      // ========================================
+      // ATUALIZAR TIMER
+      // ========================================
+
+      function atualizarTimer() {
+        if (!timerAtivo) return;
+
+        let minutos = Math.floor(tempo / 60);
+
+        let segundos = tempo % 60;
+
+        minutos = String(minutos).padStart(2, '0');
+
+        segundos = String(segundos).padStart(2, '0');
+
+        timerElemento.innerHTML = `${minutos}:${segundos}`;
+
+        localStorage.setItem(STORAGE.tempo, tempo);
+
+        tempo--;
+
+        if (tempo < 0) {
+          clearInterval(intervalo);
+
+          timerElemento.innerHTML = '00:00';
+
+          document.body.innerHTML = `
+
+            <div style="
+                color:red;
+                font-size:60px;
+                text-align:center;
+                font-weight:bold;
+                text-shadow:0 0 20px red;
+            ">
+
+                ${CONFIG.mensagemFim}
+
+            </div>
+
+        `;
+        }
+      }
+
+      // ========================================
+      // REMOVER ACENTOS
+      // ========================================
+
+      function normalizarTexto(texto) {
+        return texto
+
+          .normalize('NFD')
+
+          .replace(/[\u0300-\u036f]/g, '')
+
+          .toLowerCase()
+
+          .trim();
+      }
+
+      // ========================================
+      // VERIFICAR CÓDIGO
+      // ========================================
+
+      function verificarCodigo() {
+        const codigoDigitado = document.getElementById('senha').value;
+
+        const mensagem = document.getElementById('mensagem');
+
+        const codigoCorreto = normalizarTexto(CONFIG.codigo);
+
+        const codigoUsuario = normalizarTexto(codigoDigitado);
+
+        // ========================================
+        // CÓDIGO CORRETO
+        // ========================================
+
+        if (codigoUsuario === codigoCorreto) {
+          timerAtivo = false;
+
+          clearInterval(intervalo);
+
+          mensagem.style.color = '#22c55e';
+
+          mensagem.innerHTML = CONFIG.mensagemSucesso;
+
+          timerElemento.classList.add('sucesso');
+
+          setTimeout(() => {
+            localStorage.removeItem(STORAGE.tempo);
+
+            localStorage.removeItem(STORAGE.iniciado);
+
+            window.location.href = CONFIG.paginaSucesso;
+          }, 3000);
+
+          localStorage.setItem(STORAGE.concluido, 'true');
+
+          // ========================================
+          // CÓDIGO INCORRETO
+          // ========================================
+        } else {
+          mensagem.style.color = '#ef4444';
+
+          mensagem.innerHTML = CONFIG.mensagemErro;
+
+          timerElemento.classList.add('erro');
+
+          setTimeout(() => {
+            timerElemento.classList.remove('erro');
+          }, 300);
+        }
+      }
+    </script>
+  </body>
+</html>
